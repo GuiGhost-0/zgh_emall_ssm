@@ -16,6 +16,16 @@ public interface AdminsDao {
 
     /**
      * @Author GuiGhost
+     * @Description //TODO 根据管理员编号查询
+     * @Date 22:51 2020/12/17
+     * @Param [id]
+     * @return com.entity.Admins
+     **/
+    @Select("SELECT * FROM admins WHERE id = #{id}")
+    public Admins get(@Param("id")int id);
+
+    /**
+     * @Author GuiGhost
      * @Description //TODO 后台管理员验证
      * @Date 00:47 2020/12/13
      * @Param [admins]
@@ -59,4 +69,14 @@ public interface AdminsDao {
      **/
     @Delete("DELETE FROM admins WHERE id=#{id}")
     public boolean delete(@Param("id") int id);
+    
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 重置密码
+     * @Date 23:16 2020/12/17
+     * @Param [admins]
+     * @return boolean
+     **/
+    @Update("UPDATE admins SET password = #{password} WHERE id = #{id}")
+    public boolean updatePassword(Admins admins);
 }

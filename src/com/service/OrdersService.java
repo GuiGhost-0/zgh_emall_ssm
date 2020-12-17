@@ -2,10 +2,7 @@ package com.service;
 
 import com.config.ExceptionConfig;
 import com.dao.OrdersDao;
-import com.entity.Carts;
-import com.entity.Items;
-import com.entity.Orders;
-import com.entity.Users;
+import com.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -205,5 +202,41 @@ public class OrdersService {
      **/
     public long getCountByStatus(int status){
         return ordersDao.selectCountByStatus(status);
+    }
+
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 更新订单状态
+     * @Date 16:40 2020/12/17
+     * @Param [id, status]
+     * @return boolean
+     **/
+    public boolean updateStatus(int id,int status){
+        if (status == 2){
+            return ordersDao.updateStatus(id,Orders.STATUS_SEND);
+        }else {
+            return ordersDao.updateStatus(id,Orders.STATUS_FINISH);
+        }
+    }
+    
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 删除订单
+     * @Date 17:08 2020/12/17
+     * @Param [id]
+     * @return boolean
+     **/
+    @Transactional
+    public boolean delete(int id,int status){
+        if (status == 1){//未付款的订单中的商品和销量都应更改（因为在添加订单是改变了）
+            Orders orders = getById(id);
+            for (Items items : orders.getItemList()) {
+                goodsService.lessSales(items.getGood().getId(),items.getAmount());
+                goodsService.addStock(items.getGood().getId(),items.getAmount());
+            }
+            return ordersDao.delete(id);
+        }else {
+            return ordersDao.delete(id);
+        }
     }
 }

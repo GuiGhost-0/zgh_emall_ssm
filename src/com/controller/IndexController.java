@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -176,5 +177,20 @@ public class IndexController {
         request.setAttribute("orderList",orderList);
         request.setAttribute("pageHtml",PageUtil.getPageHtml(request,ordersService.getCountByUserId(user.getId()),page,size));
         return "/index/order.jsp";
+    }
+
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 模糊查询
+     * @Date 23:53 2020/12/17
+     * @Param [search, request]
+     * @return java.lang.String
+     **/
+    @PostMapping("/search")
+    public String search(String search,HttpServletRequest request){
+        request.setAttribute("search",search);
+        request.setAttribute("name",search);
+        request.setAttribute("goodList",goodsService.search(search));
+        return "/index/goods.jsp";
     }
 }

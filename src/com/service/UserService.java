@@ -85,4 +85,13 @@ public class UserService {
     public long getCount(){
         return userDao.selectCount();
     }
+    
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 删除指定用户
+     * @Date 18:42 2020/12/17
+     * @Param [id]
+     * @return boolean
+     **/
+    public boolean delete(int id){return userDao.delete(id);}
 }

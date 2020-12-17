@@ -66,4 +66,25 @@ public class AdminsService {
     public boolean delete(int id){
         return adminsDao.delete(id);
     }
+    
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 根据管理员编号查找
+     * @Date 22:52 2020/12/17
+     * @Param [id]
+     * @return com.entity.Admins
+     **/
+    public Admins get(int id){return adminsDao.get(id);}
+    
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 重置密码
+     * @Date 22:57 2020/12/17
+     * @Param [admins]
+     * @return boolean
+     **/
+    public boolean resetPwd(Admins admins){
+        admins.setPassword(SafeUtil.encode(admins.getPassword()));
+        return adminsDao.updatePassword(admins);
+    }
 }

@@ -42,7 +42,7 @@ public interface OrdersDao {
      * @Param []
      * @return java.util.List<com.entity.Orders>
      **/
-    @Select("SELECT * FROM orders LIMIT #{begin},#{size}")
+    @Select("SELECT * FROM orders ORDER BY id DESC LIMIT #{begin},#{size}")
     public List<Orders> selectList(@Param("begin")int begin,@Param("size")int size);
     
     /**
@@ -62,7 +62,7 @@ public interface OrdersDao {
      * @Param [userId]
      * @return java.util.List<com.entity.Orders>
      **/
-    @Select("SELECT * FROM orders WHERE user_id = #{userId} LIMIT #{begin},#{size}")
+    @Select("SELECT * FROM orders WHERE user_id = #{userId} ORDER BY id DESC LIMIT #{begin},#{size}")
     public List<Orders> selectListByUserId(@Param("userId")int userId,@Param("begin")int begin,@Param("size")int size);
 
     /**
@@ -72,7 +72,7 @@ public interface OrdersDao {
      * @Param [userId, status]
      * @return java.util.List<com.entity.Orders>
      **/
-    @Select("SELECT * FROM orders WHERE user_id = #{userId} AND status = #{status}")
+    @Select("SELECT * FROM orders WHERE user_id = #{userId} AND status = #{status} ORDER BY id DESC")
     public List<Orders> selectListByUserIdAndStatus(@Param("userId")int userId,@Param("status")int status);
 
     /**
@@ -109,7 +109,7 @@ public interface OrdersDao {
      * @Param [status]
      * @return java.util.List<com.entity.Orders>
      **/
-    @Select("SELECT * FROM orders WHERE status=#{status} LIMIT #{begin},#{size}")
+    @Select("SELECT * FROM orders WHERE status=#{status} ORDER BY id DESC LIMIT #{begin},#{size}")
     public List<Orders> selectListByStatus(@Param("status")int status,@Param("begin")int begin,@Param("size")int size);
 
     /**
@@ -122,4 +122,24 @@ public interface OrdersDao {
     @Select("SELECT COUNT(*) FROM orders WHERE status=#{status}")
     public long selectCountByStatus(@Param("status")int status);
 
+
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 更新订单状态
+     * @Date 16:33 2020/12/17
+     * @Param [id, status]
+     * @return boolean
+     **/
+    @Update("UPDATE orders SET status = #{status} WHERE id = #{id}")
+    public boolean updateStatus(@Param("id")int id,@Param("status")int status);
+    
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 删除订单
+     * @Date 17:16 2020/12/17
+     * @Param [id]
+     * @return boolean
+     **/
+    @Delete("DELETE FROM orders WHERE id = #{id}")
+    public boolean delete(@Param("id")int id);
 }

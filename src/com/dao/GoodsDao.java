@@ -145,6 +145,9 @@ public interface GoodsDao {
      **/
     @Update("UPDATE goods SET stock = stock - #{amount} WHERE id=#{id}")
     public boolean updateStock(@Param("id")int id,@Param("amount")int amount);
+
+    @Update("UPDATE goods SET stock = stock + #{amount} WHERE id=#{id}")
+    public boolean addStock(@Param("id")int id,@Param("amount")int amount);
     
     /**
      * @Author GuiGhost
@@ -155,6 +158,9 @@ public interface GoodsDao {
      **/
     @Update("UPDATE goods SET sales = sales + #{amount} WHERE id=#{id}")
     public boolean updateSales(@Param("id")int id,@Param("amount")int amount);
+
+    @Update("UPDATE goods SET sales = sales - #{amount} WHERE id=#{id}")
+    public boolean lessSales(@Param("id")int id,@Param("amount")int amount);
 
     /**
      * @Author GuiGhost
@@ -179,4 +185,24 @@ public interface GoodsDao {
      **/
     @Update("UPDATE `emall`.`goods` SET `cover` = #{cover}, `name` = #{name}, `intro` = #{intro}, `spec` = #{spec}, `price` = #{price}, `stock` = #{stock}, `sales` = #{sales}, `content` = #{content}, `type_id` = #{typeId} WHERE `id` = #{id}")
     public boolean update(Goods good);
+    
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 删除商品
+     * @Date 16:22 2020/12/17
+     * @Param [goodId]
+     * @return boolean
+     **/
+    @Delete("DELETE FROM goods WHERE id=#{goodId}")
+    public boolean delete(@Param("goodId")int goodId);
+
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 模糊查询
+     * @Date 23:33 2020/12/17
+     * @Param [search]
+     * @return java.util.List<com.entity.Goods>
+     **/
+    @Select("SELECT * FROM goods WHERE `name` LIKE #{search}")
+    public List<Goods> search(@Param("search") String search);
 }

@@ -5,6 +5,7 @@ import com.entity.Goods;
 import com.entity.Tops;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -195,6 +196,9 @@ public class GoodsService {
     public boolean updateStock(int id,int amount){
         return goodsDao.updateStock(id,amount);
     }
+    public boolean addStock(int id,int amount){
+        return goodsDao.addStock(id,amount);
+    }
 
     /**
      * @Author GuiGhost
@@ -205,6 +209,9 @@ public class GoodsService {
      **/
     public boolean updateSales(int id,int amount){
         return goodsDao.updateSales(id, amount);
+    }
+    public boolean lessSales(int id,int amount){
+        return goodsDao.lessSales(id,amount);
     }
 
     /**
@@ -227,5 +234,31 @@ public class GoodsService {
      **/
     public boolean update(Goods good){
         return goodsDao.update(good);
+    }
+
+    
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 删除商品
+     * @Date 16:14 2020/12/17
+     * @Param [goodId]
+     * @return boolean
+     **/
+    @Transactional
+    public boolean delete(int goodId){
+        topsService.remove(goodId);
+        return goodsDao.delete(goodId);
+    }
+
+
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 模糊查询
+     * @Date 23:34 2020/12/17
+     * @Param [search]
+     * @return java.util.List<com.entity.Goods>
+     **/
+    public List<Goods> search(String search){
+        return packGood(goodsDao.search("%" + search + "%"));
     }
 }

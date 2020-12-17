@@ -3,6 +3,7 @@ package com.controller;
 import com.entity.Admins;
 import com.entity.Goods;
 import com.entity.Types;
+import com.entity.Users;
 import com.service.*;
 import com.utils.PageUtil;
 import com.utils.UploadUtil;
@@ -41,6 +42,8 @@ public class AdminController {
     private OrdersService ordersService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private TopsService topsService;
 
     /**
      * @Author GuiGhost
@@ -187,6 +190,7 @@ public class AdminController {
             request.setAttribute("goodList",goodsService.getList(page,size));
             request.setAttribute("pageTool", PageUtil.getPageTool(request,goodsService.getCount(),page,size));
         }else {
+            size = 6;
             request.setAttribute("goodList",goodsService.getListByTopType(type,page,size));
             request.setAttribute("pageTool",PageUtil.getPageTool(request,goodsService.getCountByTopType(type),page,6));
         }
@@ -256,6 +260,45 @@ public class AdminController {
         goodsService.update(good);
         return "redirect:goodList";
     }
+    
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 删除商品
+     * @Date 16:17 2020/12/17
+     * @Param [id]
+     * @return java.lang.String
+     **/
+    @GetMapping("/goodDelete")
+    public String goodDelete(int id){
+        goodsService.delete(id);
+        return "redirect:goodList";
+    }
+
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 加入今日推荐模块
+     * @Date 16:00 2020/12/17
+     * @Param [id]
+     * @return java.lang.String
+     **/
+    @GetMapping("/addTop")
+    public String addTop(int id){
+        topsService.add(id);
+        return "redirect:goodList";
+    }
+    
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 移除今日推荐模块
+     * @Date 16:01 2020/12/17
+     * @Param [id]
+     * @return java.lang.String
+     **/
+    @GetMapping("/removeTop")
+    public String removeTop(int id){
+        topsService.remove(id);
+        return "redirect:goodList";
+    }
 
 
 
@@ -312,6 +355,34 @@ public class AdminController {
         return "redirect:adminList";
     }
 
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 跳转重置管理员密码页面
+     * @Date 22:58 2020/12/17
+     * @Param [id, request]
+     * @return java.lang.String
+     **/
+    @GetMapping("/adminRe")
+    public String adminRe(int id,HttpServletRequest request){
+        request.setAttribute("msg","管理员密码重置");
+        request.setAttribute("admin",adminsService.get(id));
+        return "/admin/admin_reset.jsp";
+    }
+    
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 重置密码
+     * @Date 23:00 2020/12/17
+     * @Param [admins]
+     * @return java.lang.String
+     **/
+    @PostMapping("/adminReset")
+    public String adminReset(Admins admins){
+        System.out.println(admins.getId() + "," + admins.getPassword());
+        adminsService.resetPwd(admins);
+        return "redirect:adminList";
+    }
+
 
 
     /**
@@ -338,6 +409,45 @@ public class AdminController {
 
         return "/admin/order_list.jsp";
     }
+    
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 发货模块
+     * @Date 16:27 2020/12/17
+     * @Param [id, status]
+     * @return java.lang.String
+     **/
+    @GetMapping("/orderSend")
+    public String orderSend(int id,int status){
+        ordersService.updateStatus(id,status);
+        return "redirect:orderList?status=" + status;
+    }
+
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 完成订单
+     * @Date 17:12 2020/12/17
+     * @Param [id, status]
+     * @return java.lang.String
+     **/
+    @GetMapping("/orderFinish")
+    public String orderFinish(int id,int status){
+        ordersService.updateStatus(id,status);
+        return "redirect:orderList?status=" + status;
+    }
+
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 删除订单
+     * @Date 17:42 2020/12/17
+     * @Param [id, status]
+     * @return java.lang.String
+     **/
+    @GetMapping("/orderDelete")
+    public String orderDelete(int id,int status){
+        ordersService.delete(id,status);
+        return "redirect:orderList?status=" + status;
+    }
 
     /**
      * @Author GuiGhost
@@ -354,5 +464,95 @@ public class AdminController {
         request.setAttribute("userList",userService.getList(page,size));
         request.setAttribute("pageTool",PageUtil.getPageTool(request,userService.getCount(),page,size));
         return "/admin/user_list.jsp";
+    }
+
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 跳转添加用户页面
+     * @Date 17:50 2020/12/17
+     * @Param [request]
+     * @return java.lang.String
+     **/
+    @GetMapping("/userAdd")
+    public String userAdd(HttpServletRequest request){
+        request.setAttribute("msg","添加用户");
+        return  "/admin/user_add.jsp";
+    }
+
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 保存用户信息
+     * @Date 17:53 2020/12/17
+     * @Param [users]
+     * @return java.lang.String
+     **/
+    @PostMapping("/userSave")
+    public String userSave(Users users){
+        userService.insertUsers(users);
+        return "redirect:userList";
+    }
+
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 跳转密码重置页面
+     * @Date 17:59 2020/12/17
+     * @Param [id, request]
+     * @return java.lang.String
+     **/
+    @GetMapping("/userRe")
+    public String userRe(int id,HttpServletRequest request){
+        request.setAttribute("user",userService.getById(id));
+        return "/admin/user_reset.jsp";
+    }
+
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 重置密码
+     * @Date 18:05 2020/12/17
+     * @Param [users]
+     * @return java.lang.String
+     **/
+    @PostMapping("/userReset")
+    public String userReset(Users users){
+        userService.updatePassword(users.getId(),users.getPassword());
+        return "redirect:userList";
+    }
+
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 跳转修改用户信息页面
+     * @Date 18:26 2020/12/17
+     * @Param [id, request]
+     * @return java.lang.String
+     **/
+    @GetMapping("/userEdit")
+    public String userEdit(int id,HttpServletRequest request){
+        request.setAttribute("user",userService.getById(id));
+        return "/admin/user_edit.jsp";
+    }
+    
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 提交用户修改
+     * @Date 18:27 2020/12/17
+     * @Param []
+     * @return java.lang.String
+     **/
+    @PostMapping("/userUpdate")
+    public String userUpdate(Users users){
+        userService.updateAddress(users.getId(),users);
+        return "redirect:userList";
+    }
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 删除指定用户
+     * @Date 18:35 2020/12/17
+     * @Param [id]
+     * @return java.lang.String
+     **/
+    @GetMapping("/userDelete")
+    public String userDelete(int id){
+        userService.delete(id);
+        return "redirect:userList";
     }
 }

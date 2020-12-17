@@ -2,6 +2,7 @@ package com.dao;
 
 import com.entity.Users;
 import org.apache.ibatis.annotations.*;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -71,4 +72,14 @@ public interface UserDao {
      **/
     @Select("SELECT COUNT(*) FROM users")
     public long selectCount();
+    
+    /**
+     * @Author GuiGhost
+     * @Description //TODO 删除指定用户
+     * @Date 18:42 2020/12/17
+     * @Param [id]
+     * @return boolean
+     **/
+    @Delete("DELETE FROM users WHERE id = #{id}")
+    public boolean delete(@Param("id")int id);
 }

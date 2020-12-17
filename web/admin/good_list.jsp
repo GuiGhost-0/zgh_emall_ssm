@@ -52,8 +52,8 @@
          	<td><p>${good.sales}</p></td>
 			<td>
 				<p>
-					<c:if test="${good.top}"><a class="btn btn-success topDelete" href="addTop?id=${good.id}" type="1" goodId="${good.id}" text="加入今日推荐">移出今日推荐</a></c:if>
-					<c:if test="${!good.top}"><a class="btn btn-primary topSave" href="removeTop?id=${good.id}" type="1" goodId="${good.id}" text="移出今日推荐">加入今日推荐</a></c:if>
+					<c:if test="${good.top}"><a class="btn btn-success topDelete" href="removeTop?id=${good.id}" type="1" goodId="${good.id}" text="加入今日推荐">移出今日推荐</a></c:if>
+					<c:if test="${!good.top}"><a class="btn btn-primary topSave" href="addTop?id=${good.id}" type="1" goodId="${good.id}" text="移出今日推荐">加入今日推荐</a></c:if>
 				</p>
 				<a class="btn btn-info" href="goodEdit?id=${good.id}">修改</a>
 				<a class="btn btn-danger" href="goodDelete?id=${good.id}">删除</a>

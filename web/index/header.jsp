@@ -19,7 +19,7 @@
 			<a href="index"><img src="img/logo.jpg"/></a>
 		</div>
 		<div class="sear_input">
-			<form action="search">
+			<form action="search" method="post">
 				<input type="text" name="search" value="${search}">
 				<button><i class="iconfont icon-icon--"></i></button>
 			</form>
