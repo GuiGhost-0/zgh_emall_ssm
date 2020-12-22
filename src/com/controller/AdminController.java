@@ -378,7 +378,6 @@ public class AdminController {
      **/
     @PostMapping("/adminReset")
     public String adminReset(Admins admins){
-        System.out.println(admins.getId() + "," + admins.getPassword());
         adminsService.resetPwd(admins);
         return "redirect:adminList";
     }
